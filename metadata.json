@@ -1,0 +1,6 @@
+{
+  "name": "متتبع العادات بأوقات الصلوات",
+  "description": "تطبيق ويب خفيف وبسيط لتتبع العادات اليومية مقسمة بحسب أوقات الصلوات الخمس المفروضة باستخدام HTML و CSS و JavaScript فقط دون مكتبات خارجية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

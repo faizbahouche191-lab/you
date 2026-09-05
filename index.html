@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>متتبع العادات بأوقات الصلوات</title>
+    <meta name="description" content="تطبيق ويب خفيف وبسيط لتتبع العادات اليومية مقسمة بحسب أوقات الصلوات الخمس المفروضة باستخدام HTML و CSS و JavaScript فقط دون مكتبات خارجية." />
+    <meta property="og:title" content="متتبع العادات بأوقات الصلوات" />
+    <meta property="og:description" content="تطبيق ويب خفيف وبسيط لتتبع العادات اليومية مقسمة بحسب أوقات الصلوات الخمس المفروضة باستخدام HTML و CSS و JavaScript فقط دون مكتبات خارجية." />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- ترويسة التطبيق -->
+      <header class="app-header" id="main-header">
+        <div class="header-top">
+          <div class="brand-wrapper">
+            <div class="brand-icon">🕌</div>
+            <div>
+              <h1 class="brand-title">متتبع العادات بأوقات الصلوات</h1>
+              <p class="brand-subtitle">تنظيم اليوم وترسيخ العادات الطيبة حول مواقيت الصلوات الخمس المفروضة</p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <div id="auth-section" style="display: flex; align-items: center; gap: 0.5rem;">
+              <span id="user-email" style="font-size: 0.85rem; color: var(--text-muted); display: none;"></span>
+              <button type="button" id="btn-login" class="btn btn-primary btn-sm" style="display: none;">تسجيل الدخول</button>
+              <button type="button" id="btn-logout" class="btn btn-secondary btn-sm" style="display: none;">تسجيل الخروج</button>
+            </div>
+
+            <div class="header-meta">
+              <div class="meta-chip active-prayer" id="current-prayer-badge">
+                <span>⏳</span>
+                <span>جارٍ تحديد الصلاة...</span>
+              </div>
+              <div class="meta-chip streak-chip" id="streak-badge">
+                <span>🔥</span>
+                <span id="streak-count-display">0 أيام متتالية</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التنقل بين التواريخ -->
+        <nav class="date-navigator" aria-label="التنقل بين الأيام">
+          <button type="button" class="date-btn" id="btn-next-date" title="اليوم التالي">
+            <span>←</span>
+            <span>اليوم التالي</span>
+          </button>
+          
+          <div class="current-date-text" id="current-date-display">
+            جارٍ تحميل التاريخ...
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" class="date-btn" id="btn-today" title="الانتقال إلى اليوم">
+              <span>اليوم</span>
+            </button>
+            <button type="button" class="date-btn" id="btn-prev-date" title="اليوم السابق">
+              <span>اليوم السابق</span>
+              <span>→</span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <!-- بطاقات الإحصائيات ونسبة الإنجاز -->
+      <section class="stats-overview" aria-label="ملخص إنجاز اليوم">
+        <div class="stat-card" id="card-stat-percent">
+          <div class="stat-card-content">
+            <span class="stat-label">نسبة الإنجاز اليومي</span>
+            <span class="stat-value" id="stat-percent">0٪</span>
+            <span class="stat-subtext">من إجمالي عادات اليوم</span>
+          </div>
+          <div class="progress-ring-container">
+            <svg class="progress-ring" width="60" height="60" aria-hidden="true">
+              <circle class="progress-ring-bg" stroke-width="5" fill="transparent" r="24" cx="30" cy="30" />
+              <circle class="progress-ring-bar" id="stat-progress-ring-bar" stroke-width="5" fill="transparent" r="24" cx="30" cy="30" />
+            </svg>
+            <div class="progress-ring-text" id="stat-progress-ring-text">0%</div>
+          </div>
+        </div>
+
+        <div class="stat-card" id="card-stat-completed">
+          <div class="stat-card-content">
+            <span class="stat-label">العادات المكتملة</span>
+            <span class="stat-value" id="stat-completed" style="color: var(--primary);">0</span>
+            <span class="stat-subtext">تمت بنجاح في هذا اليوم</span>
+          </div>
+          <div style="font-size: 2rem;">✅</div>
+        </div>
+
+        <div class="stat-card" id="card-stat-remaining">
+          <div class="stat-card-content">
+            <span class="stat-label">العادات المتبقية</span>
+            <span class="stat-value" id="stat-remaining" style="color: var(--gold-dark);">0</span>
+            <span class="stat-subtext">بانتظار إنجازك لها</span>
+          </div>
+          <div style="font-size: 2rem;">⏳</div>
+        </div>
+      </section>
+
+      <!-- شريط تصفية الفترات -->
+      <nav class="prayers-filter-bar" id="filter-tabs" aria-label="تصفية بحسب فترة الصلاة">
+        <!-- يتم ملؤه تلقائياً بواسطة JavaScript -->
+      </nav>
+
+      <!-- شريط الأوامر السريعة -->
+      <div class="toolbar">
+        <button type="button" class="btn btn-primary" id="btn-open-add-modal">
+          <span>+</span>
+          <span>إضافة عادة جديدة</span>
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-defaults" title="استعادة العادات الافتراضية">
+          <span>🔄</span>
+          <span>استعادة العادات النموذجية</span>
+        </button>
+      </div>
+
+      <!-- قائمة أقسام فترات الصلوات -->
+      <main class="prayer-sections-list" id="prayer-sections-container">
+        <!-- يتم رسم أقسام الصلوات والعادات هنا عبر JavaScript -->
+      </main>
+
+      <!-- تذييل الصفحة -->
+      <footer class="app-footer">
+        <p class="footer-quote">«أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ»</p>
+        <p>تطبيق ويب خفيف يعمل بتقنيات الويب النقية (HTML + CSS + JavaScript) بدون أي مكتبات أو أطر عمل خارجية.</p>
+      </footer>
+    </div>
+
+    <!-- نافذة إضافة عادة جديدة (HTML5 Dialog) -->
+    <dialog class="modal" id="add-habit-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">إضافة عادة جديدة</h2>
+        <button type="button" class="modal-close" id="btn-close-modal" aria-label="إغلاق">✕</button>
+      </div>
+
+      <form id="add-habit-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="habit-title-input">اسم العادة أو المهمة</label>
+            <input type="text" id="habit-title-input" class="form-input" placeholder="مثال: قراءة صفحتين من القرآن، شرب كأس ماء..." required maxlength="60" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="habit-prayer-select">فترة الصلاة المفروضة</label>
+            <select id="habit-prayer-select" class="form-select">
+              <option value="fajr">🌅 فترة الفجر (من الفجر إلى الضحى)</option>
+              <option value="dhuhr">☀️ فترة الظهر (من الظهر إلى العصر)</option>
+              <option value="asr">⛅ فترة العصر (من العصر إلى المغرب)</option>
+              <option value="maghrib">🌇 فترة المغرب (من المغرب إلى العشاء)</option>
+              <option value="isha">🌙 فترة العشاء (من العشاء إلى النوم)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الرمز التعبيري للعادة</label>
+            <div class="emoji-picker-row" id="emoji-picker-container">
+              <button type="button" class="emoji-choice-btn selected" data-emoji="📖">📖</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="🤲">🤲</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="💧">💧</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="🏃‍♂️">🏃‍♂️</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="🥗">🥗</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="💤">💤</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="📚">📚</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="✍️">✍️</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="🕌">🕌</button>
+              <button type="button" class="emoji-choice-btn" data-emoji="📵">📵</button>
+            </div>
+          </div>
+
+          <!-- اقتراحات سريعة للفترة المختارة -->
+          <div class="suggestions-box">
+            <div class="suggestions-title">💡 اقتراحات شائعة لهذه الفترة (انقر للاختيار):</div>
+            <div class="suggestions-chips" id="modal-suggestions-container">
+              <!-- تضاف برمجياً -->
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-modal">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ العادة</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,855 @@
+/* ==========================================================================
+   متتبع العادات بأوقات الصلوات - أنماط CSS نقية (Vanilla CSS)
+   خالٍ تماماً من أي مكتبات أو أطر عمل خارجية
+   ========================================================================== */
+
+:root {
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --primary-light: #f0fdfa;
+  --primary-subtle: #ccfbf1;
+  --primary-border: #99f6e4;
+  
+  --gold: #d97706;
+  --gold-light: #fef3c7;
+  --gold-dark: #b45309;
+
+  --bg-main: #f8faf9;
+  --bg-card: #ffffff;
+  --bg-muted: #f1f5f4;
+
+  --text-main: #132a26;
+  --text-muted: #526b65;
+  --text-light: #829a94;
+
+  --border-color: #e2e8e6;
+  --border-focus: #0f766e;
+
+  --success: #10b981;
+  --success-light: #ecfdf5;
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(15, 118, 110, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(15, 118, 110, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 25px -3px rgba(15, 118, 110, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base Setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Arabic", "Cairo", Tahoma, sans-serif;
+  line-height: 1.6;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top right, rgba(15, 118, 110, 0.05), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(217, 119, 6, 0.03), transparent 35%),
+              var(--bg-main);
+  padding: 0;
+  margin: 0;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem 1rem;
+}
+
+/* Header */
+.app-header {
+  margin-bottom: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.brand-icon {
+  font-size: 2.2rem;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Date & Prayer Info */
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-muted);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.meta-chip.active-prayer {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border-color: var(--primary-border);
+}
+
+.meta-chip.streak-chip {
+  background: var(--gold-light);
+  color: var(--gold-dark);
+  border-color: #fde68a;
+}
+
+/* Date Navigator */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  margin-top: 1.25rem;
+  border: 1px solid var(--border-color);
+}
+
+.date-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.date-btn:hover {
+  background: var(--bg-card);
+  color: var(--primary);
+}
+
+.current-date-text {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  text-align: center;
+}
+
+/* Stats Overview */
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-border);
+}
+
+.stat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.stat-subtext {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.1rem;
+}
+
+/* Circular Progress Meter */
+.progress-ring-container {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-bg {
+  stroke: var(--bg-muted);
+}
+
+.progress-ring-bar {
+  stroke: var(--primary);
+  transition: stroke-dashoffset 0.5s ease-in-out;
+  stroke-linecap: round;
+}
+
+.progress-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* Quick Filter Tabs for Prayers */
+.prayers-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+}
+
+.filter-tab {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition);
+}
+
+.filter-tab:hover {
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+
+.filter-tab.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+}
+
+.filter-tab .badge {
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.filter-tab.active .badge {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Action Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.2);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 118, 110, 0.25);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-muted);
+  border-color: var(--primary-border);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Prayer Sections */
+.prayer-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.prayer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.prayer-card:hover {
+  border-color: var(--primary-border);
+}
+
+.prayer-card.is-current {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1), var(--shadow-md);
+}
+
+.prayer-card-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(to left, var(--bg-card), var(--bg-muted));
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.prayer-card.is-current .prayer-card-header {
+  background: linear-gradient(to left, var(--bg-card), var(--primary-light));
+}
+
+.prayer-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.prayer-icon {
+  font-size: 1.4rem;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prayer-card.is-current .prayer-icon {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+}
+
+.prayer-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.current-indicator {
+  font-size: 0.7rem;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.prayer-time-range {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.prayer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.prayer-progress-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.prayer-progress-bar-bg {
+  width: 80px;
+  height: 6px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.prayer-progress-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* Habit List */
+.habits-list {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.habit-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  user-select: none;
+}
+
+.habit-item:hover {
+  background: var(--bg-card);
+  border-color: var(--primary-border);
+  transform: translateX(-2px);
+}
+
+.habit-item.is-completed {
+  background: var(--success-light);
+  border-color: #a7f3d0;
+}
+
+.habit-content-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex: 1;
+  cursor: pointer;
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.habit-item:hover .custom-checkbox {
+  border-color: var(--primary);
+}
+
+.habit-item.is-completed .custom-checkbox {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.checkmark-icon {
+  display: none;
+  font-size: 0.85rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.habit-item.is-completed .checkmark-icon {
+  display: block;
+}
+
+.habit-emoji {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.habit-title {
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--text-main);
+  transition: var(--transition);
+}
+
+.habit-item.is-completed .habit-title {
+  text-decoration: line-through;
+  color: #065f46;
+  opacity: 0.8;
+}
+
+.habit-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.habit-btn-delete {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  padding: 0.35rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  opacity: 0.4;
+}
+
+.habit-item:hover .habit-btn-delete {
+  opacity: 1;
+}
+
+.habit-btn-delete:hover {
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+/* Empty State */
+.empty-period {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Dialog Modal */
+dialog.modal {
+  margin: auto;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  background: var(--bg-card);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 90%;
+  border: 1px solid var(--border-color);
+}
+
+dialog.modal::backdrop {
+  background: rgba(19, 42, 38, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.modal-close:hover {
+  color: var(--text-main);
+  background: var(--bg-muted);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: var(--transition);
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+/* Emoji Suggestions */
+.emoji-picker-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.emoji-choice-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-muted);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.emoji-choice-btn:hover, .emoji-choice-btn.selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Quick Suggestions inside Modal */
+.suggestions-box {
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  border: 1px solid var(--border-color);
+}
+
+.suggestions-title {
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.suggestions-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.suggestion-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: var(--transition);
+}
+
+.suggestion-chip:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: var(--bg-muted);
+}
+
+/* Footer & Tips */
+.app-footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-quote {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem 0.75rem 2rem 0.75rem;
+  }
+
+  .app-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .brand-title {
+    font-size: 1.3rem;
+  }
+
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.75rem;
+  }
+
+  .prayer-card-header {
+    padding: 1rem;
+  }
+
+  .habits-list {
+    padding: 0.75rem 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .stats-overview {
+    grid-template-columns: 1fr;
+  }
+}

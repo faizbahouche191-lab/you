@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "Habit": {
+      "title": "Habit",
+      "description": "A habit to be tracked for a specific prayer.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "prayerId": { "type": "string", "enum": ["fajr", "dhuhr", "asr", "maghrib", "isha"] },
+        "title": { "type": "string", "maxLength": 60, "minLength": 1 },
+        "emoji": { "type": "string", "maxLength": 10 },
+        "createdAt": { "type": "string", "maxLength": 24 }
+      },
+      "required": ["userId", "prayerId", "title", "emoji", "createdAt"]
+    },
+    "Completion": {
+      "title": "Completion",
+      "description": "A record of a completed habit on a specific date.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "habitId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 10 }
+      },
+      "required": ["userId", "habitId", "date"]
+    }
+  },
+  "firestore": {
+    "users/{userId}/habits/{habitId}": {
+      "schema": { "$ref": "#/entities/Habit" },
+      "description": "Habits defined by a specific user."
+    },
+    "users/{userId}/completions/{completionId}": {
+      "schema": { "$ref": "#/entities/Completion" },
+      "description": "Habit completions by a specific user."
+    }
+  }
+}
